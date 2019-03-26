@@ -16,11 +16,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import cn.bmob.v3.BmobUser;
 import cool.weiboproject.android.R;
 import cool.weiboproject.android.activity.ChangePwdActivity;
-import cool.weiboproject.android.activity.LoginActivity;
 import cool.weiboproject.android.bean.CurrentUser;
+import cool.weiboproject.android.dialog.LogoutDialog;
 import cool.weiboproject.android.utils.CurrentUserHelper;
 
 public class MeFragment extends Fragment implements View.OnTouchListener {
@@ -29,6 +28,7 @@ public class MeFragment extends Fragment implements View.OnTouchListener {
     @BindView(R.id.tv_change_pwd) TextView mChangePwd;
     @BindView(R.id.tv_title) TextView mUserName;
 
+    private LogoutDialog mLogoutDialog;
     private CurrentUser mCurrentUser;
     Unbinder unbinder;
 
@@ -82,9 +82,9 @@ public class MeFragment extends Fragment implements View.OnTouchListener {
 
     @OnClick(R.id.tv_logout)
     public void logoutClicked() {
-        BmobUser.logOut();
-        CurrentUserHelper.getInstance().updateCurrentUser(null);
-        startActivity(new Intent(getActivity(), LoginActivity.class));
-        getActivity().finish();
+        if (mLogoutDialog == null) {
+            mLogoutDialog = new LogoutDialog();
+        }
+        mLogoutDialog.tryShow(getChildFragmentManager());
     }
 }

@@ -15,6 +15,7 @@ import cool.weiboproject.android.R;
 import cool.weiboproject.android.base.BaseActivity;
 import cool.weiboproject.android.bean.WeiBoBean;
 import cool.weiboproject.android.constants.AppConstant;
+import cool.weiboproject.android.dialog.CommentDialog;
 import cool.weiboproject.android.share.AndroidShare;
 import cool.weiboproject.android.utils.ResourceUtil;
 import cool.weiboproject.android.utils.ToastHelper;
@@ -34,6 +35,7 @@ public class ReaderActivity extends BaseActivity {
     @BindView(R.id.btn_share) Button mShare;
     private WeiBoBean mWeiBoBean;
     private int changBGClickCount;
+    private CommentDialog mCommentDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,7 @@ public class ReaderActivity extends BaseActivity {
         mBookValue.setText(mWeiBoBean.getValue());
         mBookValue.setMovementMethod(ScrollingMovementMethod.getInstance());
     }
+
 
     @OnClick(R.id.btn_chang_night_read_book_activity)
     public void changNight() {
@@ -86,6 +89,7 @@ public class ReaderActivity extends BaseActivity {
         WeiBoBean weiBoBean = WeiBoDaoUtils.getInstance().queryOneData(mWeiBoBean.getCreatTime());
         if (weiBoBean == null) {
             WeiBoDaoUtils.getInstance().insertOneData(mWeiBoBean);
+            ToastHelper.showShortMessage("收藏成功");
         } else {
             ToastHelper.showShortMessage("已经收藏");
         }
@@ -93,13 +97,13 @@ public class ReaderActivity extends BaseActivity {
 
     @OnClick(R.id.btn_share)
     public void shareClicked() {
-        AndroidShare as = new AndroidShare(this, "YangWeiBo 分享：" + mWeiBoBean.toString(), null);
+        AndroidShare as = new AndroidShare(this, "YangWeiBo 分享：" + mWeiBoBean.toString(), "");
         as.show();
     }
 
     @OnClick(R.id.btn_comment)
     public void commentClicked() {
-
+        showCommentDialog();
     }
 
     @Override
@@ -107,5 +111,13 @@ public class ReaderActivity extends BaseActivity {
         super.onBackPressed();
         finish();
         overridePendingTransition(R.anim.exit_stop_original_place, R.anim.exit_to_right);
+    }
+
+    public void showCommentDialog() {
+        if (mCommentDialog == null) {
+            mCommentDialog = new CommentDialog();
+        }
+        mCommentDialog.setData(mWeiBoBean);
+        mCommentDialog.tryShow(getSupportFragmentManager());
     }
 }
