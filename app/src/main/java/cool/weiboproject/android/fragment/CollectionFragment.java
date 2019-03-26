@@ -1,7 +1,6 @@
 package cool.weiboproject.android.fragment;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,36 +11,27 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-import com.blankj.utilcode.util.LogUtils;
+import android.widget.AdapterView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
 import cool.weiboproject.android.R;
-import cool.weiboproject.android.activity.SendWeiBoActivity;
-import cool.weiboproject.android.adapter.NoteAdapter;
-import cool.weiboproject.android.bean.Note;
+import cool.weiboproject.android.adapter.WeiBoAdapter;
+import cool.weiboproject.android.bean.WeiBoBean;
+import cool.weiboproject.android.utils.ActivityUtil;
+import cool.weiboproject.android.utils.WeiBoDaoUtils;
 
 
 public class CollectionFragment extends Fragment implements View.OnTouchListener {
 
-    @BindView(R.id.tv_title_note_activity) TextView mTitle;
-    @BindView(R.id.tv_send_note_activity) TextView mSendNote;
     @BindView(R.id.rv_note_activity) RecyclerView mRecyclerView;
-    @BindView(R.id.tv_empty_note_activity) TextView tvEmptyNoteActivity;
 
-    List<Note> noteList = new ArrayList<>();
-
-    private NoteAdapter noteAdapter;
+    private List<WeiBoBean> mWeiBoBeanList = new ArrayList<>();
+    private WeiBoAdapter mWeiBoAdapter;
 
     Unbinder unbinder;
 
@@ -61,7 +51,7 @@ public class CollectionFragment extends Fragment implements View.OnTouchListener
     @Override
     public void onResume() {
         super.onResume();
-        getMediaData();
+        getCollectionData();
     }
 
     @Override
@@ -75,42 +65,33 @@ public class CollectionFragment extends Fragment implements View.OnTouchListener
         return true;
     }
 
-    public void getMediaData() {
-        BmobQuery<Note> query = new BmobQuery<Note>();
-        // 按时间降序查询
-        query.order("-createdAt");
-        query.setLimit(80);
-        //从服务器获取衣服图片 集合 Arraylist
-        query.findObjects(new FindListener<Note>() {
-            @Override
-            public void done(List<Note> list, BmobException e) {
-                if (e == null) {
-                    noteList = list;
-                    if (noteList.size() == 0) {
-                        if (tvEmptyNoteActivity == null) {return;}
-                        tvEmptyNoteActivity.setText("还未有编写的帖子");
-                        tvEmptyNoteActivity.setVisibility(View.VISIBLE);
-                    } else {
-                        if (mRecyclerView != null) {
-                            tvEmptyNoteActivity.setVisibility(View.GONE);
-                            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                            noteAdapter = new NoteAdapter(noteList, getActivity());
-                            mRecyclerView.setAdapter(noteAdapter);
-                        }
-                    }
-                } else {
-                    if (tvEmptyNoteActivity == null) {return;}
-                    LogUtils.e("NoteActivity e =" + e);
-                    tvEmptyNoteActivity.setText("获取数据失败");
-                    tvEmptyNoteActivity.setVisibility(View.VISIBLE);
-                }
-
-            }
-        });
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            getCollectionData();
+        }
     }
 
-    @OnClick(R.id.tv_send_note_activity)
-    public void senNote() {
-        startActivity(new Intent(getActivity(), SendWeiBoActivity.class));
+    public void getCollectionData() {
+        mWeiBoBeanList = WeiBoDaoUtils.getInstance().queryAllData();
+        if (mWeiBoAdapter == null) {
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            mWeiBoAdapter = new WeiBoAdapter();
+            mWeiBoAdapter.setOnItemClickListener(mBookClickListener);
+            mWeiBoAdapter.setDataSilently(mWeiBoBeanList);
+            mRecyclerView.setAdapter(mWeiBoAdapter);
+        } else {
+            mWeiBoAdapter.setData(mWeiBoBeanList);
+        }
     }
+
+    private AdapterView.OnItemClickListener mBookClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, final View view, final int position, long id) {
+            if (mWeiBoAdapter == null) { return; }
+            WeiBoBean weiBoBean = mWeiBoAdapter.getItem(position);
+            ActivityUtil.startReaderActivity(CollectionFragment.this, weiBoBean);
+        }
+    };
 }

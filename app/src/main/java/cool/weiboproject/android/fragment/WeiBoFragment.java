@@ -59,12 +59,12 @@ public class WeiBoFragment extends Fragment implements View.OnTouchListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         view.setOnTouchListener(this);
-        getBookList();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        getBookList();
     }
 
     @Override

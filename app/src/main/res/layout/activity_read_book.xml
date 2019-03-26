@@ -53,17 +53,29 @@
 
             <Button
                 android:id="@+id/btn_collection"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:paddingLeft="@dimen/dp10"
                 android:paddingRight="@dimen/dp10"
                 android:text="收藏"/>
 
             <Button
-                android:id="@+id/btn_share"
-                android:layout_width="wrap_content"
+                android:id="@+id/btn_comment"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp5"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/dp10"
+                android:paddingRight="@dimen/dp10"
+                android:text="评论"/>
+
+            <Button
+                android:id="@+id/btn_share"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp5"
+                android:layout_weight="1"
                 android:paddingLeft="@dimen/dp10"
                 android:paddingRight="@dimen/dp10"
                 android:text="分享"/>

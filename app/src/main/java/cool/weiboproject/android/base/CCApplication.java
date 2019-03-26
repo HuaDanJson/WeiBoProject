@@ -6,6 +6,7 @@ import android.support.multidex.MultiDexApplication;
 import com.blankj.utilcode.util.Utils;
 
 import cool.weiboproject.android.utils.ToastHelper;
+import cool.weiboproject.android.utils.WeiBoDaoUtils;
 
 
 public class CCApplication extends MultiDexApplication {
@@ -26,5 +27,6 @@ public class CCApplication extends MultiDexApplication {
         INSTANCE = this;
         Utils.init(this);
         ToastHelper.init(this);
+        WeiBoDaoUtils.Init(this);
     }
 }

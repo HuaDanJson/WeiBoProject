@@ -17,6 +17,8 @@ import cool.weiboproject.android.bean.WeiBoBean;
 import cool.weiboproject.android.constants.AppConstant;
 import cool.weiboproject.android.share.AndroidShare;
 import cool.weiboproject.android.utils.ResourceUtil;
+import cool.weiboproject.android.utils.ToastHelper;
+import cool.weiboproject.android.utils.WeiBoDaoUtils;
 
 
 public class ReaderActivity extends BaseActivity {
@@ -81,7 +83,12 @@ public class ReaderActivity extends BaseActivity {
 
     @OnClick(R.id.btn_collection)
     public void collectionClicked() {
-
+        WeiBoBean weiBoBean = WeiBoDaoUtils.getInstance().queryOneData(mWeiBoBean.getCreatTime());
+        if (weiBoBean == null) {
+            WeiBoDaoUtils.getInstance().insertOneData(mWeiBoBean);
+        } else {
+            ToastHelper.showShortMessage("已经收藏");
+        }
     }
 
     @OnClick(R.id.btn_share)
@@ -90,11 +97,15 @@ public class ReaderActivity extends BaseActivity {
         as.show();
     }
 
+    @OnClick(R.id.btn_comment)
+    public void commentClicked() {
+
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         finish();
         overridePendingTransition(R.anim.exit_stop_original_place, R.anim.exit_to_right);
     }
-
 }

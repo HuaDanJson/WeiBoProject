@@ -25,12 +25,33 @@
             android:textSize="14sp"/>
     </LinearLayout>
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/feedback_activity_edit_feedback_background">
+
+        <EditText
+            android:id="@+id/edt_introduce"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@null"
+            android:gravity="center"
+            android:hint="请输入简介"
+            android:textSize="14sp"/>
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="175dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="47dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/feedback_activity_edit_feedback_background">
 
         <EditText
@@ -41,7 +62,7 @@
             android:layout_marginTop="10dp"
             android:background="@null"
             android:gravity="center"
-            android:hint="请输入帖子内容"
+            android:hint="请输入内容"
             android:textSize="14sp"/>
     </LinearLayout>
 
