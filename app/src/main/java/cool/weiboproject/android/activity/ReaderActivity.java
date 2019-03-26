@@ -1,7 +1,9 @@
 package cool.weiboproject.android.activity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
+import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -11,12 +13,16 @@ import com.blankj.utilcode.util.LogUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.UpdateListener;
 import cool.weiboproject.android.R;
 import cool.weiboproject.android.base.BaseActivity;
+import cool.weiboproject.android.bean.CurrentUser;
 import cool.weiboproject.android.bean.WeiBoBean;
 import cool.weiboproject.android.constants.AppConstant;
 import cool.weiboproject.android.dialog.CommentDialog;
 import cool.weiboproject.android.share.AndroidShare;
+import cool.weiboproject.android.utils.CurrentUserHelper;
 import cool.weiboproject.android.utils.ResourceUtil;
 import cool.weiboproject.android.utils.ToastHelper;
 import cool.weiboproject.android.utils.WeiBoDaoUtils;
@@ -33,9 +39,12 @@ public class ReaderActivity extends BaseActivity {
     @BindView(R.id.btn_chang_bg_color_read_book_activity) Button btnChangBgColorReadBookActivity;
     @BindView(R.id.btn_collection) Button mCollection;
     @BindView(R.id.btn_share) Button mShare;
+    @BindView(R.id.btn_delete) Button mDelete;
+    @BindView(R.id.btn_comment) Button mComment;
     private WeiBoBean mWeiBoBean;
     private int changBGClickCount;
     private CommentDialog mCommentDialog;
+    private CurrentUser mCurrentUsr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +53,30 @@ public class ReaderActivity extends BaseActivity {
         ButterKnife.bind(this);
         mWeiBoBean = (WeiBoBean) getIntent().getSerializableExtra(AppConstant.IntentKey.EXTRA_DATA);
         LogUtils.d("ReaderActivity  mWeiBoBean : " + mWeiBoBean);
-        if (mWeiBoBean == null) {
+        mCurrentUsr = CurrentUserHelper.getInstance().getCurrentUser();
+        if (mWeiBoBean == null || mCurrentUsr == null) {
             onBackPressed();
             return;
         }
         mTitle.setText(mWeiBoBean.getTitle());
         mBookValue.setText(mWeiBoBean.getValue());
         mBookValue.setMovementMethod(ScrollingMovementMethod.getInstance());
+        String sendUserName = mWeiBoBean.getSendUserName();
+        if (TextUtils.isEmpty(sendUserName)) {
+            mDelete.setVisibility(View.GONE);
+        } else {
+            if (sendUserName.equals(mCurrentUsr.getUsername())) {
+                mDelete.setVisibility(View.VISIBLE);
+            } else {
+                mDelete.setVisibility(View.GONE);
+            }
+        }
+        WeiBoBean weiBoBean = WeiBoDaoUtils.getInstance().queryOneData(mWeiBoBean.getCreatTime());
+        if (weiBoBean == null) {
+            mCollection.setText("收藏");
+        } else {
+            mCollection.setText("取消收藏");
+        }
     }
 
 
@@ -86,12 +112,16 @@ public class ReaderActivity extends BaseActivity {
 
     @OnClick(R.id.btn_collection)
     public void collectionClicked() {
-        WeiBoBean weiBoBean = WeiBoDaoUtils.getInstance().queryOneData(mWeiBoBean.getCreatTime());
-        if (weiBoBean == null) {
+        String text = mCollection.getText().toString();
+        if (TextUtils.isEmpty(text)) {return;}
+        if ("收藏".equals(text)) {
             WeiBoDaoUtils.getInstance().insertOneData(mWeiBoBean);
+            mCollection.setText("取消收藏");
             ToastHelper.showShortMessage("收藏成功");
         } else {
-            ToastHelper.showShortMessage("已经收藏");
+            WeiBoDaoUtils.getInstance().deleteOneDataByKey(mWeiBoBean.getCreatTime());
+            mCollection.setText("收藏");
+            ToastHelper.showShortMessage("取消收藏成功");
         }
     }
 
@@ -104,6 +134,22 @@ public class ReaderActivity extends BaseActivity {
     @OnClick(R.id.btn_comment)
     public void commentClicked() {
         showCommentDialog();
+    }
+
+    @OnClick(R.id.btn_delete)
+    public void deleteClicked() {
+        mWeiBoBean.setObjectId(mWeiBoBean.getObjectId());
+        mWeiBoBean.delete(new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    ToastHelper.showShortMessage("删除成功");
+                    finish();
+                } else {
+                    ToastHelper.showShortMessage("删除失败");
+                }
+            }
+        });
     }
 
     @Override
