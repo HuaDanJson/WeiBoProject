@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">YangWeiBo</string>
+    <string name="back_btn_exit_pop">再按一次返回键退出</string>
+</resources>
