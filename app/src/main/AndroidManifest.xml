@@ -32,6 +32,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activity.SearchWeiBoActivity">
+        </activity>
         <activity android:name=".activity.CommentActivity">
         </activity>
         <activity
@@ -71,7 +73,6 @@
         <activity
             android:name=".activity.ChangePwdActivity"
             android:screenOrientation="portrait"/>
-
     </application>
 
 </manifest>

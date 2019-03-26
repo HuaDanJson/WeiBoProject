@@ -32,6 +32,14 @@ public class ActivityUtil {
         fragment.getActivity().overridePendingTransition(R.anim.enter_from_right, R.anim.slide_in_from_middle_to_middle);
     }
 
+    public static void startReaderActivity(Activity activity, WeiBoBean weiBoBean) {
+        if (activity == null) { return; }
+        Intent intent = new Intent(activity, ReaderActivity.class);
+        intent.putExtra(AppConstant.IntentKey.EXTRA_DATA, weiBoBean);
+        activity.startActivity(intent);
+        activity.overridePendingTransition(R.anim.enter_from_right, R.anim.slide_in_from_middle_to_middle);
+    }
+
     public static void startLoginActivity(Activity activity) {
         BmobUser.logOut();
         CurrentUserHelper.getInstance().updateCurrentUser(null);

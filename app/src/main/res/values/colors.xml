@@ -187,5 +187,6 @@
     <color name="album_bg_color">#D8D8D8</color>
     <color name="update_music_bg">#AB2C2C2C</color>
     <color name="feedback_activity_edit_stroke_color">#1f000000</color>
+    <color name="yellow87">#FFffb300</color>
 
 </resources>
