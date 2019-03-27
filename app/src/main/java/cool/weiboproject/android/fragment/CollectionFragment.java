@@ -21,8 +21,10 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cool.weiboproject.android.R;
 import cool.weiboproject.android.adapter.WeiBoAdapter;
+import cool.weiboproject.android.bean.CurrentUser;
 import cool.weiboproject.android.bean.WeiBoBean;
 import cool.weiboproject.android.utils.ActivityUtil;
+import cool.weiboproject.android.utils.CurrentUserHelper;
 import cool.weiboproject.android.utils.WeiBoDaoUtils;
 
 
@@ -32,6 +34,7 @@ public class CollectionFragment extends Fragment implements View.OnTouchListener
 
     private List<WeiBoBean> mWeiBoBeanList = new ArrayList<>();
     private WeiBoAdapter mWeiBoAdapter;
+    private CurrentUser mCurrentUser;
 
     Unbinder unbinder;
 
@@ -46,6 +49,7 @@ public class CollectionFragment extends Fragment implements View.OnTouchListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         view.setOnTouchListener(this);
+        mCurrentUser = CurrentUserHelper.getInstance().getCurrentUser();
     }
 
     @Override
@@ -74,15 +78,20 @@ public class CollectionFragment extends Fragment implements View.OnTouchListener
     }
 
     public void getCollectionData() {
-        mWeiBoBeanList = WeiBoDaoUtils.getInstance().queryAllData();
-        if (mWeiBoAdapter == null) {
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            mWeiBoAdapter = new WeiBoAdapter();
-            mWeiBoAdapter.setOnItemClickListener(mBookClickListener);
-            mWeiBoAdapter.setDataSilently(mWeiBoBeanList);
-            mRecyclerView.setAdapter(mWeiBoAdapter);
-        } else {
-            mWeiBoAdapter.setData(mWeiBoBeanList);
+        if (mCurrentUser == null) {
+            mCurrentUser = CurrentUserHelper.getInstance().getCurrentUser();
+        }
+        if (mCurrentUser != null) {
+            mWeiBoBeanList = WeiBoDaoUtils.getInstance().queryCurrentCollectionData(mCurrentUser.getUsername());
+            if (mWeiBoAdapter == null) {
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                mWeiBoAdapter = new WeiBoAdapter();
+                mWeiBoAdapter.setOnItemClickListener(mBookClickListener);
+                mWeiBoAdapter.setDataSilently(mWeiBoBeanList);
+                mRecyclerView.setAdapter(mWeiBoAdapter);
+            } else {
+                mWeiBoAdapter.setData(mWeiBoBeanList);
+            }
         }
     }
 

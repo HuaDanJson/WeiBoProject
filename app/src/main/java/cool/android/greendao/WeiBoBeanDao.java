@@ -29,6 +29,7 @@ public class WeiBoBeanDao extends AbstractDao<WeiBoBean, Long> {
         public final static Property Introduce = new Property(2, String.class, "introduce", false, "INTRODUCE");
         public final static Property Value = new Property(3, String.class, "value", false, "VALUE");
         public final static Property SendUserName = new Property(4, String.class, "sendUserName", false, "SEND_USER_NAME");
+        public final static Property CollectionUserName = new Property(5, String.class, "collectionUserName", false, "COLLECTION_USER_NAME");
     }
 
 
@@ -48,7 +49,8 @@ public class WeiBoBeanDao extends AbstractDao<WeiBoBean, Long> {
                 "\"WeiBoBean\" TEXT," + // 1: title
                 "\"INTRODUCE\" TEXT," + // 2: introduce
                 "\"VALUE\" TEXT," + // 3: value
-                "\"SEND_USER_NAME\" TEXT);"); // 4: sendUserName
+                "\"SEND_USER_NAME\" TEXT," + // 4: sendUserName
+                "\"COLLECTION_USER_NAME\" TEXT);"); // 5: collectionUserName
     }
 
     /** Drops the underlying database table. */
@@ -81,6 +83,11 @@ public class WeiBoBeanDao extends AbstractDao<WeiBoBean, Long> {
         if (sendUserName != null) {
             stmt.bindString(5, sendUserName);
         }
+ 
+        String collectionUserName = entity.getCollectionUserName();
+        if (collectionUserName != null) {
+            stmt.bindString(6, collectionUserName);
+        }
     }
 
     @Override
@@ -107,6 +114,11 @@ public class WeiBoBeanDao extends AbstractDao<WeiBoBean, Long> {
         if (sendUserName != null) {
             stmt.bindString(5, sendUserName);
         }
+ 
+        String collectionUserName = entity.getCollectionUserName();
+        if (collectionUserName != null) {
+            stmt.bindString(6, collectionUserName);
+        }
     }
 
     @Override
@@ -121,7 +133,8 @@ public class WeiBoBeanDao extends AbstractDao<WeiBoBean, Long> {
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // title
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // introduce
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // value
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // sendUserName
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // sendUserName
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // collectionUserName
         );
         return entity;
     }
@@ -133,6 +146,7 @@ public class WeiBoBeanDao extends AbstractDao<WeiBoBean, Long> {
         entity.setIntroduce(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setValue(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setSendUserName(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setCollectionUserName(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
      }
     
     @Override

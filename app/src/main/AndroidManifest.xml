@@ -70,14 +70,16 @@
         <activity
             android:name=".activity.ChangePwdActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.SearchWeiBoActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.CommentActivity"
-            android:screenOrientation="portrait"/>>
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".activity.MyWeiBoActivity"
+            android:screenOrientation="portrait"/>
 
     </application>
 

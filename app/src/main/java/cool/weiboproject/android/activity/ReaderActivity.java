@@ -120,11 +120,12 @@ public class ReaderActivity extends BaseActivity {
         String text = mCollection.getText().toString();
         if (TextUtils.isEmpty(text)) {return;}
         if ("收藏".equals(text)) {
+            mWeiBoBean.setCollectionUserName(mCurrentUsr.getUsername());
             WeiBoDaoUtils.getInstance().insertOneData(mWeiBoBean);
             mCollection.setText("取消收藏");
             ToastHelper.showShortMessage("收藏成功");
         } else {
-            WeiBoDaoUtils.getInstance().deleteOneDataByKey(mWeiBoBean.getCreatTime());
+            WeiBoDaoUtils.getInstance().deleteOneData(mWeiBoBean);
             mCollection.setText("收藏");
             ToastHelper.showShortMessage("取消收藏成功");
         }

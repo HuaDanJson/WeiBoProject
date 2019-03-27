@@ -31,10 +31,25 @@
         android:textStyle="bold"/>
 
     <TextView
-        android:id="@+id/tv_change_pwd"
+        android:id="@+id/tv_my_weibo"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_below="@+id/tv_search_weibo"
+        android:layout_marginLeft="56dp"
+        android:layout_marginRight="56dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/shape_blue_10dp"
+        android:gravity="center"
+        android:text="我发布的微博"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tv_change_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/tv_my_weibo"
         android:layout_marginLeft="56dp"
         android:layout_marginRight="56dp"
         android:layout_marginTop="40dp"

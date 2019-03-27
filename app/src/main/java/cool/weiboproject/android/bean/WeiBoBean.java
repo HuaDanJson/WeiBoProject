@@ -18,15 +18,17 @@ public class WeiBoBean extends BmobObject {
     private String introduce;//简介
     private String value;//内容
     private String sendUserName;//人名字
+    private String collectionUserName;
 
-    @Generated(hash = 1559725796)
+    @Generated(hash = 707614071)
     public WeiBoBean(long creatTime, String title, String introduce, String value,
-                     String sendUserName) {
+                     String sendUserName, String collectionUserName) {
         this.creatTime = creatTime;
         this.title = title;
         this.introduce = introduce;
         this.value = value;
         this.sendUserName = sendUserName;
+        this.collectionUserName = collectionUserName;
     }
 
     @Generated(hash = 1694485307)
@@ -71,6 +73,14 @@ public class WeiBoBean extends BmobObject {
 
     public void setSendUserName(String sendUserName) {
         this.sendUserName = sendUserName;
+    }
+
+    public String getCollectionUserName() {
+        return this.collectionUserName;
+    }
+
+    public void setCollectionUserName(String collectionUserName) {
+        this.collectionUserName = collectionUserName;
     }
 
     @Override

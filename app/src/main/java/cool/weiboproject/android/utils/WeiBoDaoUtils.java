@@ -176,9 +176,9 @@ public class WeiBoDaoUtils {
      *
      * @return
      */
-//    public List<WeiBoBean> queryDataDependSendId(int senderId) {
-//        return weiBoBeanDao.queryBuilder().where(WeiBoBeanDao.Properties.SenderId.eq(senderId)).build().list();
-//    }
+    public List<WeiBoBean> queryCurrentCollectionData(String currentUserName) {
+        return weiBoBeanDao.queryBuilder().where(WeiBoBeanDao.Properties.CollectionUserName.eq(currentUserName)).build().list();
+    }
 
 //    /**
 //     * 完成对数据库条件查询数据操作 senderId
